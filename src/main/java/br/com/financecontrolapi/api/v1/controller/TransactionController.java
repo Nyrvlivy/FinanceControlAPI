@@ -64,7 +64,7 @@ public class TransactionController {
         return ResponseEntity.ok(dtos);
     }
 
-    @Operation(summary = "Update transactions", method = "PUT")
+    @Operation(summary = "Update transactions by ID", method = "PUT")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Update transaction operation successful"),
             @ApiResponse(responseCode = "400", description = "Invalid input"),
@@ -87,4 +87,19 @@ public class TransactionController {
         return ResponseEntity.ok(dto);
     }
 
+    @Operation(summary = "Delete transaction by ID", method = "DELETE")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Delete transaction operation successful"),
+            @ApiResponse(responseCode = "400", description = "Invalid input"),
+            @ApiResponse(responseCode = "404", description = "Transaction not found"),
+            @ApiResponse(responseCode = "422", description = "Invalid request data."),
+            @ApiResponse(responseCode = "500", description = "Internal server error"),
+    })
+    @CrossOrigin
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTransaction(@PathVariable Integer id) {
+        transactionService.findById(id);
+        transactionService.deleteById(id);
+        return ResponseEntity.accepted().build();
+    }
 }

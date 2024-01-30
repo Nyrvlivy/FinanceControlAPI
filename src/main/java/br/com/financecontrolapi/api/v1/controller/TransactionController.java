@@ -102,4 +102,16 @@ public class TransactionController {
         transactionService.deleteById(id);
         return ResponseEntity.accepted().build();
     }
+
+    @Operation(summary = "Delete all transactions", method = "DELETE")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "All transactions deleted successfully"),
+            @ApiResponse(responseCode = "500", description = "Internal server error"),
+    })
+    @CrossOrigin
+    @DeleteMapping
+    public ResponseEntity<Void> deleteAllTransactions() {
+        transactionService.deleteAllTransactions();
+        return ResponseEntity.accepted().build();
+    }
 }

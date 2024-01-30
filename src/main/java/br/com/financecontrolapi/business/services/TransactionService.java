@@ -40,4 +40,7 @@ public class TransactionService {
         transactionRepository.deleteById(id);
     }
 
+    public void deleteAllTransactions() {
+        transactionRepository.deleteAll();
+    }
 }

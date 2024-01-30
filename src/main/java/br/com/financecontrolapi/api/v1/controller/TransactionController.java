@@ -6,6 +6,7 @@ import br.com.financecontrolapi.api.v1.mapper.TransactionMapper;
 import br.com.financecontrolapi.business.services.TransactionService;
 import br.com.financecontrolapi.infrastructure.entities.TransactionEntity;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,15 +27,29 @@ public class TransactionController {
     private final TransactionService transactionService;
     private final TransactionMapper transactionMapper;
 
-    @Operation(summary = "Find all transactions", method = "GET")
+
+    @Operation(summary = "Find all transactions or filter by date and/or category", method = "GET")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Search operation successful"),
-            @ApiResponse(responseCode = "500", description = "Internal server error"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @CrossOrigin
     @GetMapping
-    public ResponseEntity<List<TransactionDTO>> findAllTransactions() {
-        List<TransactionEntity> transactions = transactionService.findAllTransactions();
+    public ResponseEntity<List<TransactionDTO>> findAllTransactions(
+            @Parameter(description = "Date to filter transactions (optional, format: yyyy-MM-dd)")
+            @RequestParam(value = "date", required = false) String dateString,
+            @Parameter(description = "Category to filter transactions (optional, format: string)")
+            @RequestParam(value = "category", required = false) String category) {
+
+        List<TransactionEntity> transactions;
+        if (dateString != null && !dateString.isEmpty()) {
+            LocalDate date = LocalDate.parse(dateString);
+            transactions = transactionService.filterByDateAndCategory(date, category);
+        } else if (category != null && !category.isEmpty()) {
+            transactions = transactionService.filterByCategory(category);
+        } else {
+            transactions = transactionService.findAllTransactions();
+        }
 
         List<TransactionDTO> dtos = transactions.stream()
                 .map(transactionMapper::toDto)
@@ -41,6 +57,7 @@ public class TransactionController {
 
         return ResponseEntity.ok(dtos);
     }
+
 
     @Operation(summary = "Save new transactions", method = "POST")
     @ApiResponses(value = {
@@ -114,4 +131,5 @@ public class TransactionController {
         transactionService.deleteAllTransactions();
         return ResponseEntity.accepted().build();
     }
+
 }

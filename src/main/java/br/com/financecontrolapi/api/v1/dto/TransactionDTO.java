@@ -16,8 +16,6 @@ public class TransactionDTO {
 
     @JsonProperty(value = "id")
     private Integer id;
-//    @JsonProperty(value = "entity_id")
-//    private String entityId;
     @JsonProperty(value = "date")
     private LocalDate date;
     @JsonProperty(value = "value")

@@ -23,6 +23,18 @@ public class TransactionController {
     private final TransactionMapper transactionMapper;
 
     @CrossOrigin
+    @GetMapping
+    public ResponseEntity<List<TransactionDTO>> findAllTransactions() {
+        List<TransactionEntity> transactions = transactionService.findAllTransactions();
+
+        List<TransactionDTO> transactionDTOs = transactions.stream()
+                .map(transactionMapper::toDto)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(transactionDTOs);
+    }
+
+    @CrossOrigin
     @PostMapping
     public ResponseEntity<List<TransactionDTO>> createTransactions(@RequestBody TransactionListDTO transactionListDTO) {
         List<TransactionEntity> transactionEntities = transactionListDTO.getTransactions().stream()

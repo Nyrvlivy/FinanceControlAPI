@@ -13,6 +13,10 @@ public class TransactionService {
 
     private final TransactionRepository transactionRepository;
 
+    public List<TransactionEntity> findAllTransactions() {
+        return transactionRepository.findAll();
+    }
+
     public TransactionEntity createTransaction(TransactionEntity entity) {
         return transactionRepository.save(entity);
     }

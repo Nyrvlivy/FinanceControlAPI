@@ -68,7 +68,7 @@ for financial data processing.
 - [ ] Run the application using Spring Boot.
 
 ```bash
-        mvn spring-boot:run
+    mvn spring-boot:run
 ```
 
 - [ ] Access the API documentation via your localhost: `<your_port>/swagger-ui.html`.

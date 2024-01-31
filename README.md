@@ -51,7 +51,7 @@ for financial data processing.
 - [ ] Clone your repository to your machine;
 
 ```bash
-    git clone https://github.com/your-user/finance-control-api.git
+    git clone https://github.com/nyrvlivy/finance-control-api.git
 ```
 
 #### Set up your development environment:
